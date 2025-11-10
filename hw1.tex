@@ -1,0 +1,592 @@
+\documentclass{article}
+
+\usepackage[left=1.25in,top=1.25in,right=1.25in,bottom=1.25in,head=1.25in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{verbatim,float,url,enumerate}
+\usepackage{graphicx,subfigure,psfrag}
+\usepackage{natbib,xcolor}
+\usepackage{microtype}
+
+\newtheorem{algorithm}{Algorithm}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newtheorem{corollary}{Corollary}
+
+\theoremstyle{remark}
+\newtheorem{remark}{Remark}
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}
+
+\newcommand{\argmin}{\mathop{\mathrm{argmin}}}
+\newcommand{\argmax}{\mathop{\mathrm{argmax}}}
+\newcommand{\minimize}{\mathop{\mathrm{minimize}}}
+\newcommand{\maximize}{\mathop{\mathrm{maximize}}}
+\newcommand{\st}{\mathop{\mathrm{subject\,\,to}}}
+
+\def\R{\mathbb{R}}
+\def\E{\mathbb{E}}
+\def\P{\mathbb{P}}
+\def\S{\mathbb{S}}
+\def\Cov{\mathrm{Cov}}
+\def\Var{\mathrm{Var}}
+\def\half{\frac{1}{2}}
+\def\sign{\mathrm{sign}}
+\def\supp{\mathrm{supp}}
+\def\th{\mathrm{th}}
+\def\tr{\mathrm{tr}}
+\def\dim{\mathrm{dim}}
+\def\dom{\mathrm{dom}}
+
+\begin{document}
+
+\title{Homework 1}
+\author{\Large Convex Optimization 10-725}
+\date{{\bf Due Friday September 13 at 11:59pm} \\
+\bigskip
+Submit your work as a single PDF on Gradescope. Make sure to prepare your
+solution to each problem on a separate page. (Gradescope will ask you select the 
+pages which contain the solution to each problem.) \\  
+\bigskip 
+Total: 66 points (+ 10 bonus points)}
+\maketitle
+
+\section{Convex sets (16 points)}
+r
+
+\noindent
+(a, 12 pts) Closed sets and convex sets. 
+\begin{enumerate}[i.]
+\item Show that a polyhedron $\{x \in \R^n : Ax \leq b \}$, for some $A\in
+  \R^{m\times  n},  b\in \R^m$, is both convex and closed.  
+\item  Show that if $S_i \subseteq \R^n$, $i\in I$ is a collection of convex 
+  sets, then their intersection $\cap_{i\in I} S_i$ is also convex.  Show that
+  the same statement holds if we replace ``convex'' with ``closed''.  
+\item Given an example of a closed set in $\R^2$ whose convex hull is not
+  closed.  
+\item Let $A\in\R^{m\times n}$. Show that if $S\subseteq \R^m$ is convex then
+  so is $A^{-1}(S) =\{ x \in \R^n : Ax \in S\}$, which is called the preimage of
+  $S$ under the map $A :\R^n  \to \R^m$. Show that the same statement holds if
+  we replace  ``convex'' with ``closed''.   
+\item Let $A\in\R^{m\times n}$.  Show that if $S\subseteq \R^n$ is convex then 
+  so is $A(S) = \{ Ax : x \in S \}$, called the image of $S$ under $A$. 
+\item  Give an example of a matrix $A\in\R^{m\times n}$ and a set $S\subseteq
+  \R^n$ that is closed and convex but such that $A(S)$ is not closed.  
+\end{enumerate}
+
+$\bf{Solution}$: 
+\begin{enumerate}[i.]
+\item $ \forall t \in \R, x,y \in polyhedron$ $A(tx) + A(1-t)y \le tb + (1-t)b = b$, then $tx + (1-t)y \in polyhedron$
+Fact in Real Analysis: 
+1.The preimage of a closed set under a continuous mapping is closed.
+A is a linear map, so A is continuous function from $\R^m$ to $\R^n$,  $\{y: y\le b\}$ is a convex set, and polyhedron $\{x\in \R^n: Ax \le b\} $ is the preimage of A under set  $\{y: y\le b\}$. So the polyhedron is a closed set.
+
+\item suppose $x, y \in \bigcap_{i\in I}S_i, \text{then }tx + (1-t)y \in \bigcap_{i \in I}S_i$
+suppose $\{x_k\}_{k\ge 1}$is a number sequence in $\bigcap_{i\in I}S_i$ and has a limit of $x$, and $S_i$ are all closed. then $x \in S_i , \forall i$ i.e. $x \in \bigcap_{i\in I}S_i$. Thus $\bigcap_{i\in I}S_i$ is closed.
+
+\item $S = (\{0\} \times [0,1]) \cup ([0, \infty) \times \{0\})$, 
+then $conv(S) = \{(x,y): 0 \le y < 1, x \ge 0\} \cup \{(0,1)\}.$
+
+\item like Q(i.) A is continuous map, so the preimage of closed set S under map A is closed. On the other hand, suppose $x,y\in A^{-1}(S)$ then $\forall t \in [0,1], A(tx + (1-t)y) = tAx + (1-t)Ay$. Because $Ax,Ay \in S$ convex, so  $tAx + (1-t)Ay \in S$. i.e. $tx + (1-t)y \in A^{-1}(S)$ So $A^{-1}(S) $ is also convex.
+
+\item $\forall Ax, Ay \in A(S),x,y\in \text{ convex } S, tAx + (1-t)Ay = A(tx + (1-t)y) \in A(S) $because $tx + (1-t)y \in S$ So A(S) is also convex
+
+\item
+\[
+A = 
+\begin{bmatrix}
+1 & 0 \\
+0 & 0
+\end{bmatrix},
+\qquad
+S = \{ (x,y) \in \mathbb{R}^2 : xy \ge 1,\, x > 0 \}.
+\]
+
+Then
+\[
+A(S) = \{ (x,0) : x > 0 \},
+\]
+which is not closed in $\mathbb{R}^2$ (it misses the limit point $(0,0)$).
+
+\end{enumerate}
+
+
+\bigskip
+\noindent
+(b, 4 pts) Polyhedra.
+\begin{enumerate}[i.]
+\item Show that if $P \subseteq \R^n$ is a polyhedron, and $A \in \R^{m \times
+    n}$, then $A(P)$ is a polyhedron. Hint: you may use the fact that 
+  $$
+  \text{$P \subseteq \R^{m+n}$ is a polyhedron} 
+  \; \Rightarrow \;
+  \text{$\{x\in \R^n : \text{$(x,y)\in P$ for some $y\in\R^m$}\}$ 
+    is a polyhedron}.
+  $$
+\item Show that if $Q \subseteq \R^m$ is a polyhedron, and $A \in \R^{m \times
+    n}$, then $A^{-1}(Q)$ is a polyhedron. 
+\end{enumerate}
+
+$\bf{Solution}$:
+\begin{enumerate}[i.]
+\item Suppose P is surrounded by k half-space, because $P$ is a polyhedron, so $P = \{x: Bx \le b, B \in \R^{k \times n}\}, A(P)=\{Ax: Bx \le b\}$ We first show that $Q = \{(y,x) \in \R^m \times \R^n: y = Ax, Bx \le b\} $ is a polyhedron. Then we use the fact provided above to project Q into the first m dimensions space which is A(P)
+
+Note that the properties Q meet can be written as 3 set of linear equations: $y-Ax \le 0$, $-y + Ax \le 0$, $0y + Bx \le b$ 
+Define $E = [I_m \; -A]$ whose size is $m \times (m+n)$ and $B = [0_{k \times m }\; B] $whose size is $k \times (m+n)$ Let \[
+M = \begin{bmatrix}
+E \\ -E \\ B'
+\end{bmatrix}
+\quad 
+c = \begin{bmatrix}
+  0 \\ 0 \\ b 
+\end{bmatrix}
+\]
+Then \[
+Q = \{ z\in \R^{m + n}: Mz \le c\}
+\]
+So Q is a polyhedron, then Q's subspace A(P) is polyhedron
+
+\item $Q = \{x:Bx \le b\}$ $A^{-1}(Q) = \{y: Ay = x, x\in Q\}$ \\
+Similarly, define $$
+P = \{(y, x): Ay=x, \; Bx \le b\} 
+$$
+Let $E = [A \; -I_m]$ $B'= [0_{k \times n} \; B]$
+\[
+M = \begin{bmatrix}
+  E \\ -E \\ B'
+\end{bmatrix}
+\quad
+c = \begin{bmatrix}
+  0 \\ 0 \\ b
+\end{bmatrix}
+\]
+Then \[
+P = \{z \in R^{n+m}: Mz \le c\}
+\]
+i.e. P is a polyhedron, thus $P_y = \{y: Ay=x, \text{for some x that } Bx \le b\}$ is a polyhedron
+\end{enumerate}
+
+\section{Convex functions (14 points)}
+
+\noindent
+(a, 2 pts) Prove that the {\it entropy function}, defined as
+$$
+f(x) = -\sum_{i=1}^n x_i \log(x_i),
+$$
+with \smash{$\dom(f) = \{x \in \R^n_{++} : \sum_{i=1}^n x_i = 1\}$},
+is strictly concave.  
+
+\bigskip
+\noindent
+(b, 4 pts) Let $f$ be twice differentiable, with $\mathrm{dom}(f)$ convex.
+Prove that $f$ is convex if and only if  
+$$
+(\nabla f(x) - \nabla f(y))^T (x-y) \geq 0,
+$$
+for all $x,y$.  This property is called {\it monotonicity} of the gradient
+$\nabla f$.   
+
+\bigskip
+\noindent
+(c, 2 pts) Give an example of a strictly convex function that does not attain
+its infimum. 
+
+\bigskip
+\noindent
+(d, 3 pts) A function $f : \R^n \to \R$ is said to be {\it coercive} provided
+that $f(x) \to \infty$ as $\|x\|_2 \to \infty$.  A key fact about coercive
+functions is that they attain their infimums.  Prove that a twice
+differentiable, strongly convex function is coercive and hence attains its
+infimum. Hint: use Q3 part (b.iv).  
+
+\bigskip
+\noindent
+(e, 3 pts) Prove that the maximum of a convex function over a bounded
+polyhedron must occur at one of the vertices. Hint: you may use the fact that a
+bounded polyhedron can be represented as the convex hull of its vertices.
+
+$\bf{Solution}$
+\begin{enumerate}[a.]
+  \item First dom(f) is convex. Then we only need to show that -f(x) is strictly convex 
+  \[
+  (tlogt)\prime = logt + 1
+  \]
+  \[ 
+  (logt + 1)\prime = \frac{1}{t} > 0 \quad \text{if }t > 0
+  \]
+  Then $-\nabla^2f(x) = diag\{\frac{1}{x_1}, \frac{1}{x_2}, \dots, \frac{1}{x_n}\}$ is apparently positive definite when $x\in \R^n_{++}$
+  Thus -f(x) is strictly convex, so f(x) is strictly concave
+
+  \item Apply Taylor's Theorem to $\nabla f(x)$
+  \[
+  \nabla f(x+ \delta x) - \nabla f(x) = \int_{0}^{1} \nabla^2f(x + t\delta x) \delta x dt \tag{2.b.1}
+  \]
+  Let \( H(t) = \nabla^2 f(x + t \delta x) \). Then for any vector \( \delta x \in \mathbb{R}^n \),
+we have
+\[
+\delta x^\top \!\left( \int_0^1 H(t)\, \delta x\, dt \right)
+= \sum_i \delta_i \left( \int_0^1 \sum_j H_{ij}(t)\, \delta_j\, dt \right)
+= \int_0^1 \sum_{i,j} \delta_i\, H_{ij}(t)\, \delta_j\, dt.
+\]
+Therefore,
+\[
+\delta x^\top \!\left( \int_0^1 H(t)\, \delta x\, dt \right)
+= \int_0^1 \delta x^\top H(t)\, \delta x\, dt.
+\]
+This shows that the scalar factor \( \delta x^\top \) can be moved inside the integral sign,
+since integration is linear and the matrix–vector multiplication is performed componentwise. \\
+If f is convex, then $\nabla^2 f(x) \succeq 0$ Multiply $\delta^T x $ on left side of (2.b.1). 
+Then due to H(t)'s PSD, right side is non-negetive which justify "convex $\Rightarrow \nabla f$'s monotonicity"
+\\
+On the other side, to prove convex, it suffices to prove that 
+\[
+f(y) - f(x) \ge \nabla f(x) (y-x) \quad \forall y,x
+\]
+define 
+\[
+g(t) = f(x + t(y-x)) - f(x) - \nabla f(x)(t(y-x)) \quad t\in [0,1]
+\]
+\[
+g'(t) = \nabla f(x+t(y-x))(y-x) - \nabla f(x)(y-x) = (\nabla f(x+t(y-x))-\nabla f(x))t(y-x) / t \ge 0
+\]
+Thus g(t) is monotonically increasing and $g(1) > g(0)$ i.e. $f(y) - f(x) \ge \nabla f(x)(y-x)$
+
+\item $f(x) = \frac{1}{x} \quad x > 0$
+\item If f is strongly convex with modulus $m > 0, f - \frac{m}{2}\|x\|_2^2 $ is convex. Then 
+\[
+\nabla^2 (f - x^T \frac{m}{2}I x) = \nabla^2 f(x) - mI \succeq 0
+\]
+Define 
+\[
+g(t) = f(x_0 + t(x-x_0)) - f(x_0) - \nabla f(x_0)t(x-x_0) - \frac{m}{2}\|t(x-x_0)\|^2 \quad t\in[0,1]
+\]
+\[
+g'(t) = \nabla f(x_0 + t(x-x_0))(x-x_0) - \nabla f(x_0)(x-x_0) - m\|x-x_0\|^2 t
+\]
+\[
+g''(t) = (\nabla^2 f(x_0 + t(x-x_0))(x-x_0))^T (x-x_0) - m\|x-x_0\|^2
+\]
+Because $\nabla^2 f(x) - mI \succeq 0 \quad \forall x\in dom(f)$ So $g''(t) \ge 0, \; g'(t)\;\; increase$ \\
+$g'(0) = \nabla f(x_0)(x-x_0) - \nabla f(x_0)(x-x_0) = 0$ Thus $g'(t) \ge 0$ and $g(t) \; increase$. Then $g(1) \ge g(0)$
+\[
+f(x) - f(x_0) - \nabla f(x_0)(x-x_0) - \frac{m}{2}\|x-x_0\|^2 \ge 0
+\]
+Then
+\[
+f(x) - f(x_0) \ge \nabla f(x_0)(x-x_0) + \frac{m}{2}\|x-x_0\|^2 \ge -\|\nabla f(x_0)\| \|x-x_0\| + \frac{m}{2}\|x-x_0\|^2 \to \infty \;\; \text{when } \|x-x_0\| \to \infty
+\]
+Thus f(x) is coercive and hence attains its infimum
+
+\item suppose the bounded polyhedron $P = conv(v_1, v_2 , \dots, v_m)$ for each $x \in P$ there exists a $\theta \in \R^m_{++}, \sum_{i=1}^{m}\theta_i = 1$ s.t.
+\[
+x = \sum_{i=1}^{m}\theta_i v_i
+\]
+then 
+\[
+f(x) \le \sum_{i=1}^{m}\theta_i f(v_i) \le \max_{v_i}f(v_i)
+\]
+So the maximum of a convex function over a bounded polyhedron must occur at one of the vertices.
+\end{enumerate}
+\section{Partial optimization with $\ell_2$ penalties (10 bonus points)} 
+
+Consider the problem
+\begin{equation}
+\label{eq:L2_prob}
+\min_{\beta, \, \sigma \geq 0} \; f(\beta) + \frac{\lambda}{2} \sum_{i=1}^n
+g(\beta_i,\sigma_i), 
+\end{equation}
+for some convex $f$ with domain $\R^n$, $\lambda \geq 0$, and
+$$
+g(x,y) = \begin{cases}
+x^2/y + y & \text{if $y > 0$} \\
+0 & \text{if $x=0$, $y=0$} \\
+\infty & \text{else}.
+\end{cases}
+$$
+In other words, the problem \eqref{eq:L2_prob} is just the weighted $\ell_2$
+penalized problem 
+$$
+\min_{\beta, \, \sigma \geq 0} \;\, f(\beta) +
+\frac{\lambda}{2} \sum_{i=1}^n
+\Big(\frac{\beta_i^2}{\sigma_i}+\sigma_i\Big),
+$$
+but being careful to treat the $i$th term in the sum as zero when
+$\beta_i=\sigma_i=0$.
+
+
+\bigskip
+\noindent
+(a, 5 pts) Prove that $g$ is convex. Hence argue that \eqref{eq:L2_prob} is a 
+convex problem.  Note that this means we can perform partial
+optimization in \eqref{eq:L2_prob} and expect it to return another
+convex problem. Hint: use the definition of convexity. 
+
+\bigskip
+\noindent
+(b, 2 pts) Argue that $\min_{y \geq 0} \, g(x,y) = 2|x|$.
+
+\bigskip
+\noindent
+(c, 3 pts) Argue that minimizing over $\sigma \geq 0$ in \eqref{eq:L2_prob}  
+gives the $\ell_1$ penalized problem
+$$
+\min_\beta \; f(\beta) + \lambda \|\beta\|_1.
+$$
+
+$\bf{Solution}$
+\begin{enumerate}[a.]
+\item when $y > 0$:
+\[
+\nabla^2 g(x,y) = \begin{pmatrix}
+  2/y & -2x/y^2 \\
+  -2xy^2 & 2x^2/y^3 \; 
+\end{pmatrix}
+\]
+for each $z = (z_1, z_2)$ we have
+\[
+z^T \nabla^2g(x, y)z = \frac{2z_1^2}{y} - \frac{4xz_1z_2}{y^2} + \frac{2x^2z_2^2}{y^3}
+= \frac{2}{y}(z_1 - \frac{xz_2}{y})^2 \ge 0
+\]
+so $\nabla^2g(x,y)$ is PSD. g is convex when $y > 0$ \\
+In another case,suppose $x_1 = 0, y_1 = 0, y_2 > 0$, then \\ 
+$g(tx_1 + (1-t)x_2, ty_1 + (1-t)y_2) = (1-t)x_2^2 / y_2 + (1-t)y_2 = (1-t)g(x_2, y_2) = tg(x_1, y_1) + (1-t)g(x_2, y_2)$\\
+Apparently when one point makes $g(x,y) \to \infty$, then the 2 points still meet convex property. \\
+Next, $(\beta, \sigma) \in \R^{2n} \to (\beta_i, \sigma_i)\in \R^2$ is an affine map. So $g(\beta_i, \sigma_i)$ is an affine composition where $g: \R^2 \to \R$ is convex. 
+Thus $(\beta, \sigma) \to g(\beta_i, \sigma_i)$ is a convex function. The linear combination of convex functions with postive coefficients is convex function. Thus (1) is a convex problem.
+
+\item $\frac{x^2}{y} + y \ge 2\sqrt{\frac{x^2}{y}y} = 2|x|$. The equality holds when $y = |x|$
+
+\item define $h(\beta) = \min\limits_{\sigma \ge 0} f(\beta) + \frac{\lambda}{2}\sum_{i=1}^{n}g(\beta_i, \sigma_i)$. Because $\{\sigma: \sigma \ge 0\}$ is convex set, the original problem is convex,
+thus according to Partial minimization $h(\beta)$ is convex.
+
+\begin{align}
+ h(\beta) &= f(\beta) + \frac{\lambda}{2}\min\limits_{\sigma \ge 0}\sum_{i=1}^{n}g(\beta_i, \sigma_i) \\
+ &= f(\beta) + \frac{\lambda}{2}\sum_{i=1}^{n}\min\limits_{\sigma_i \ge 0}g(\beta_i, \sigma_i) \\
+ &= f(\beta) + \lambda \sum_{i=1}^{n}|\beta_i|
+\end{align}
+So problem (1) can be regularized to 
+\[
+\min\limits_{\beta}h(\beta) = \min\limits_{\beta} f(\beta) + \lambda\|\beta\|_1
+\]
+
+\end{enumerate}
+\section{Lipschitz gradients and strong convexity (18 points)}
+
+Let $f$ be convex and twice continuously differentiable.
+
+\bigskip
+\noindent
+(a, 10 pts) Show that the following statements are equivalent.
+\begin{enumerate}[i.]
+\item $\nabla f$ is Lipschitz with constant $L$;
+\item $(\nabla f(x) - \nabla f(y))^T(x-y) \leq L \|x-y\|_2^2$ for all
+  $x,y$; 
+\item $\nabla^2 f(x) \preceq LI$ for all $x$;
+\item $f(y) \leq f(x) + \nabla f(x)^T (y-x) + \frac{L}{2} \|y-x\|_2^2$
+  for all $x,y$.
+\end{enumerate}
+Your solution should have 5 parts, where you prove i $\Rightarrow$ ii, ii
+$\Rightarrow$ iii, iii $\Rightarrow$ iv, iv $\Rightarrow$ ii, and iii
+$\Rightarrow$ i. 
+
+\bigskip
+\noindent
+(b, 8 pts) Show that the following statements are equivalent.
+\begin{enumerate}[.]
+\item $f$ is strongly convex with constant $m$;
+\item $(\nabla f(x) - \nabla f(y))^T(x-y) \geq m \|x-y\|_2^2$ for all
+  $x,y$;
+\item $\nabla^2 f(x) \succeq mI$ for all $x$;
+\item $f(y) \geq f(x) + \nabla f(x)^T (y-x) + \frac{m}{2}
+  \|y-x\|_2^2$ for all $x,y$.
+\end{enumerate}
+Your solution should have 4 parts, where you prove i $\Rightarrow$ ii, ii
+$\Rightarrow$ iii, iii $\Rightarrow$ iv, and iv $\Rightarrow$ i.
+\\
+$\bf{Solution}$ 
+(a)
+\begin{enumerate}[1.]
+\item $i \Rightarrow ii$: 
+\[
+(\nabla f(x) - \nabla f(y))^T (x-y) \le \|\nabla f(x) - \nabla f(y)\|\|x-y\| \le L\|x-y\|_2^2
+\]
+\item $ii \Rightarrow iii$
+\[
+\nabla f(x+\alpha \delta x) - \nabla f(x) = \int_{0}^{\alpha} \nabla^2 f(x+t\delta x)\delta x dt
+\]
+\[
+(\delta x)^T(\nabla f(x+\alpha \delta x) - \nabla f(x)) = \int_{0}^{\alpha} (\delta x)^T\nabla^2 f(x+t\delta x)\delta x dt \le L\alpha \|\delta x\|_2^2 \tag{4.a.2}
+\]
+Define $\Phi(\alpha) = \int_{0}^{\alpha} (\delta x)^T\nabla^2 f(x+t\delta x)\delta x dt$ Thus
+\[
+\frac{\Phi(\alpha) - \Phi(0)}{\alpha - 0} \le L\|\delta x\|_2^2
+\]
+We take limit $\alpha \to 0$ then get:
+\[
+\Phi'(0) = (\delta x)^T\nabla^2 f(x+\alpha\delta x)\delta x \big|_{\alpha=0} = (\delta x)^T\nabla^2 f(x)\delta x \le L\|\delta x\|_2^2
+\]
+the above $x$ is arbitrary so $\forall x \in dom(f), \nabla^2 f(x) \preceq LI$ which proves (iii)
+
+\item $iii \Rightarrow iv$ \\
+Define $y = x + \delta x$ $g(t) = f(x + t\delta x) - f(x) - \nabla^Tf(x)t\delta x - \frac{L}{2}\|t\delta x\|_2^2$ $t\in[0,1]$
+Then $g(0) = 0, g(1)$ is the target.
+\[
+g'(t) = \nabla^T f(x+t\delta x)\delta x - \nabla^T f(x)\delta x - L\|\delta x\|_2^2 t
+\]
+\[
+g''(t) = (\delta x)^T \nabla^2f(x+t\delta x)\delta x - L\|\delta x\|_2^2 \le 0 \text{ because } \nabla^2 f(x+t\delta x) \preceq LI
+\]
+Thus g'(t) monotonically decreases so $g'(t) \le g'(0) = 0$; g(t) decreases so $g(1) \le g(0) = 0$
+
+\item $iv \Rightarrow ii$
+for arbitrary x, y we have:
+\[
+f(y) \leq f(x) + \nabla f(x)^T (y-x) + \frac{L}{2} \|y-x\|_2^2 \tag{a.4.1}
+\]
+\[
+f(x) \leq f(y) + \nabla f(y)^T (x-y) + \frac{L}{2} \|x-y\|_2^2 \tag{a.4.2}
+\]
+Add a.4.1 and a.4.2:
+\[
+L\|x-y\|_2^2 + (\nabla f(y) - \nabla f(x))(x-y) \ge 0
+\]
+Which proves (ii)
+
+\item $iii \Rightarrow i$
+\begin{align*}
+\|\nabla f(y) - \nabla f(x)\|_2  &= \|\int_{0}^{1} \nabla^2 f(x + t(y-x))(y-x)dt\|_2 \\
+&\le \int_{0}^{1} \|\nabla^2 f(x + t(y-x))(y-x)\|_2dt \\
+&\le \int_{0}^{1} \|\nabla^2 f(x + t(y-x))\|_{op}\|(y-x)\|_2dt \\
+&\le \int_{0}^{1} L\|(y-x)\|_2dt = L\|y-x\|_2
+\end{align*}
+Remark: $\| \cdot \|_{op}$ represents a matrix's operator-norm i.e. matrix's biggeest sigular value. For symmetric matrix $\nabla^2 f(x+t(y-x))$,
+It is the largest eigenvalue.Condition (iii) tells us $\|\nabla f(x)\|_{op} \le L, \forall x \in dom(f)$. \\
+The first inequality is because of the following fact: if $v:[a,b] \to \R^n$ is (componentwise) integrable, then 
+\[
+\left \| \int_{a }^{b}v(t)dt \right \|_2 \le \int_{a}^{b}\|v(t)\|_2dt
+\]
+Proof of the fact:
+Let \(W=\displaystyle\int_a^b v(t)\,dt\). Using the dual characterization of the Euclidean norm,
+\[
+\|W\|_2=\sup_{\|u\|_2=1} u^\top W.
+\]
+For any fixed unit vector \(u\) we have by linearity of the integral and Cauchy--Schwarz
+\[
+u^\top W
+= u^\top\int_a^b v(t)\,dt
+= \int_a^b u^\top v(t)\,dt
+\le \int_a^b |u^\top v(t)|\,dt
+\le \int_a^b \|u\|_2\|v(t)\|_2\,dt
+= \int_a^b \|v(t)\|_2\,dt.
+\]
+Taking the supremum over all \(\|u\|_2=1\) yields
+\[
+\|W\|_2 = \sup_{\|u\|_2=1} u^\top W \le \int_a^b \|v(t)\|_2\,dt,
+\]
+which is the desired inequality.
+\end{enumerate}
+
+\section{Solving optimization problems with CVX (18 points)}
+
+CVX is a fantastic framework for disciplined convex programming: it's rarely
+the fastest tool for the job, but it's widely applicable, and so it's a great
+tool to be comfortable with. In this exercise we will set up the CVX
+environment and solve a convex optimization problem.
+
+Generally speaking, for homeworks in this class, your solution to
+programming-based problems should include plots and whatever explanation
+necessary to answer the questions asked. In addition, you full code should be  
+submitted as an appendix to the homework document.
+
+CVX variants are available for each of the major numerical programming
+languages. There are some minor syntactic and functional differences between the
+variants but all provide essentially the same functionality.  Download the CVX
+variant of your choosing: 
+\begin{itemize}
+\item Matlab: \url{http://cvxr.com/cvx/}
+\item Python: \url{http://www.cvxpy.org/}
+\item R: \url{https://cvxr.rbind.io}
+\item Julia: \url{https://github.com/JuliaOpt/Convex.jl}
+\end{itemize}
+and consult the documentation to understand the basic functionality. Make sure 
+that you can solve the least squares problem $\min_\beta \; \|y-X\beta\|_2^2$
+for an arbitrary vector $y$ and matrix $X$. Check your answer by comparing with
+the closed-form solution $(X^T X)^{-1} X^T y$. 
+
+\bigskip
+\noindent
+(a, 10 pts) Given labels $y \in \{-1,1\}^n$, and a feature matrix $X \in
+\R^{n\times p}$ with rows $x_1,\ldots x_n$, recall the support vector machine 
+(SVM) problem
+\begin{alignat*}{2}
+&\min_{\beta,\beta_0,\xi} \quad
+&& \frac{1}{2} \|\beta\|_2^2 + C \sum_{i=1}^n \xi_i \\ 
+&\st \quad && \xi_i \geq 0, \; i=1,\ldots n \\
+& && y_i(x_i^T \beta + \beta_0) \geq 1-\xi_i, \;
+i=1,\ldots n.
+\end{alignat*}  
+\begin{enumerate}[i.]
+\item Load the training data in {\tt xy\_train.csv}.  This is a matrix of $n=200$
+  row and 3 columns.  The first two columns give the first $p=2$ features, and
+  the third column gives the labels.  Using CVX, solve the SVM problem with
+  $C=1$.  Report the optimal crtierion value, and the optimal coefficients
+  $\beta \in \R^2$ and intercept $\beta_0 \in \R$.  
+
+\item Recall that the SVM solution defines a hyperplane
+  $$
+  \beta_0 + \beta^T x = 0,
+  $$
+  which serves as the decision boundary for the SVM classifier.  Plot the
+  training data and color the points from the two classes differently.  Draw 
+  the decision boundary on top.  
+
+\item Now define \smash{$\tilde{X} \in \R^{n \times p}$} to have rows
+  $\tilde{x}_i=y_i x_i$, $i=1,\ldots,n$, and solve using CVX the problem  
+  \begin{alignat*}{2}
+    &\max_w \quad && -\frac{1}{2} w^T \tilde{X} \tilde{X}^T w + 1^T w \\   
+    &\st \quad && 0 \leq w \leq C1, \; w^T y = 0,
+  \end{alignat*}  
+  (Above, we use 1 to denote the vector of all 1s.)  Report the optimal
+  criterion value; it should match that from part i.  Also report
+  \smash{$\tilde{X}^T w$} at the optimal $w$; this should mach the optimal
+  $\beta$ from part i.  Note: this is not a coincidence, and is an example of
+  {\it duality}, as we will study in detail later in the course. 
+
+\item Investigate many values of the cost parameter $C=2^a$, as $a$ varies from
+  $-5$ to $5$.  For each one, solve the SVM problem, form the decision boundary,
+  and calculate the misclassification error on the test data in {\tt
+    xy\_test.csv}.  Make a plot of misclassification error (y-axis) versus $C$
+  (x-axis, which you will probably want to put a log scale). 
+\end{enumerate}
+
+\bigskip
+\noindent
+(b, 8 pts) Disciplined convex programming (DCP) is a system for composing 
+functions while ensuring their convexity. It is the language that underlies
+CVX. Essentially, each node in the parse tree for a convex expression is tagged
+with attributes for curvature (convex, concave, affine, constant) and sign
+(positive, negative) allowing for reasoning about the convexity of entire
+expressions. The website \url{http://dcp.stanford.edu/} provides visualization 
+and analysis of simple expressions. 
+
+Typically, writing problems in the DCP form is natural, but in some cases
+manipulation is required to construct expressions that satisfy the rules. For
+each set of mathematical expressions below, first briefly explain why each
+defines a convex set. Then, give an equivalent DCP expression along with a brief
+explanation of why the DCP expression is equivalent to the original for each
+set. DCP expressions should be given in a form that passes analysis (a green
+tick on the left of the expression box) at
+\url{http://dcp.stanford.edu/analyzer}. 
+Note: this question is really about developing a better understanding of the
+various composition rules for convex functions. 
+
+\begin{enumerate}[i.]
+\item $\|(x, y, z)\|_2^2 \le 1$
+\item $\sqrt{x^2 + 1} \le 3x + y$
+\item $1/x + 2/y \le 5,  x > 0, y > 0$
+\item $(x+y)^2/\sqrt{y} \le x - y + 5, y > 0$
+\item $(x+z)y \ge 1, x+z \ge 0, y \ge 0$
+\item $\|(x + 2y, x-y)\|_2 = 0$
+\item $x\sqrt{y} \ge 1$, $x \ge 0, y \ge 0$
+\item $\log(e^{y-1} + e^{x/2}) \le -e^x $
+\end{enumerate}
+\end{document}
