@@ -483,7 +483,70 @@ Taking the supremum over all \(\|u\|_2=1\) yields
 \|W\|_2 = \sup_{\|u\|_2=1} u^\top W \le \int_a^b \|v(t)\|_2\,dt,
 \]
 which is the desired inequality.
+
 \end{enumerate}
+
+$\bf{Solution} (b)$
+\[
+\nabla f(y) - \nabla f(x) = \int_{0}^{1}\nabla^2 f(x + t(y-x))(y-x)dt \tag{4.b.1}
+\]
+\[
+(y-x)^T (\nabla f(y) - \nabla f(x)) = \int_{0}^{1}(y-x)^T\nabla^2 f(x + t(y-x))(y-x)dt \tag{4.b.2}
+\]
+
+\begin{enumerate}[1.]
+\item $i \Rightarrow ii$
+because $f(x) - \frac{m}{2}\|x\|^2$ is convex, so 
+\[
+f(y) - \frac{m}{2}\|y\|^2 - f(x) + \frac{m}{2}\|x\|^2 \ge (\nabla f(x) - mx)^T(y-x) 
+\]
+
+\[
+f(x) - \frac{m}{2}\|x\|^2 - f(y) + \frac{m}{2}\|y\|^2 \ge (\nabla f(y) - my)^T(x-y) 
+\]
+Add the above 2 inequality:
+\[
+(\nabla f(y) - my - \nabla f(x) + mx)^T(y-x) \ge 0
+\]
+Thus,
+\[
+(\nabla f(y) - \nabla f(x))^T(y-x) \ge m(y-x)^T(y-x) = m\|y-x\|^2
+\]
+
+\item $ii \Rightarrow iii$
+Like (4.b.1) , given $x, y = x + \delta x$we can define:
+\[
+\Phi(\alpha) = \int_{0}^{\alpha} (\delta x)^T \nabla^2f(x + t\delta x)\delta x dt = (\delta x)^T(\nabla f(x+\alpha \delta x) - \nabla f(x)) \ge m\alpha\|\delta x\|^2 
+\]
+Divide $\alpha$ and take $\alpha \to 0$
+\[
+\Phi'(0) = (\delta x)^T\nabla^2f(x)\delta x = \lim_{\alpha \to 0}\frac{\Phi(\alpha) - \Phi(0)}{\alpha} \ge m\|\delta x\|^2
+\]
+Thus $\nabla^2f(x) \succeq mI \; \forall x \in dom(f)$
+
+\item $iii \Rightarrow iv$
+Like (4.a.iv), define $\delta x = y - x$ $g(t) = f(x + t\delta x) - f(x) - \nabla^T f(x)t\delta x - \frac{M}{2}\|t\delta x\|^2 \; t\in [0,1]$
+\[
+g'(t) = \nabla^T f(x+t\delta x)\delta x - \nabla^T f(x)\delta x - M\|\delta x\|^2 t
+\]
+\[
+g''(t) = (\delta x)^T \nabla^2 f(x+t\delta x)\delta x - M\|\delta x \|^2 \ge 0
+\]
+so $g'(t) \ge g'(0) = 0$
+Thus $f(x + \delta x) - f(x) - \nabla^T f(x)\delta x - \frac{M}{2}\|\delta x \|^2 = g(1) \ge g(0) = 0$
+
+\item $iv \Rightarrow i$ 
+$g(x) = f(x) - \frac{m}{2}\|x\|^2$, we want to show g(x) is convex. Plug g(x) into condition (iv)
+\[
+g(y) + \frac{m}{2}\|y\|^2 \ge g(x) + \frac{m}{2}\|x\|^2 + (\nabla g(x) + mx)^T(y-x) + \frac{m}{2}\|y-x\|^2
+\]
+Transfrom a bit, 
+\[
+g(y) \ge g(x) + \nabla^T g(x)(y-x) + \frac{m}{2}\|x\|^2 - \frac{m}{2}\|y\|^2 + \frac{m}{2}\|x\|^2 + \frac{m}{2}\|y\|^2 -my^T x + mx^T(y-x) = g(x) + \nabla^T g(x)(y-x)
+\]
+Which is the first order characterization of convex function. So g(x) is convex.
+\end{enumerate}
+
 
 \section{Solving optimization problems with CVX (18 points)}
 
